@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer require:*)",
+      "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" \"c:\\\\ProgramData\\\\ComposerSetup\\\\bin\\\\composer.phar\" require php-open-source-saver/jwt-auth league/flysystem-aws-s3-v3 \"^3.0\")",
+      "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" \"c:\\\\ProgramData\\\\ComposerSetup\\\\bin\\\\composer.phar\" show --installed)",
+      "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" artisan vendor:publish --provider=\"PHPOpenSourceSaver\\\\JWTAuth\\\\Providers\\\\LaravelServiceProvider\")",
+      "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" artisan jwt:secret)",
+      "Bash(php artisan migrate:*)"
+    ]
+  }
+}
