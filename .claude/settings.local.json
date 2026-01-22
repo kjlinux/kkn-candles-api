@@ -6,7 +6,11 @@
       "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" \"c:\\\\ProgramData\\\\ComposerSetup\\\\bin\\\\composer.phar\" show --installed)",
       "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" artisan vendor:publish --provider=\"PHPOpenSourceSaver\\\\JWTAuth\\\\Providers\\\\LaravelServiceProvider\")",
       "Bash(\"c:\\\\laragon\\\\bin\\\\php\\\\php-8.4.12-nts-Win32-vs17-x64\\\\php.exe\" artisan jwt:secret)",
-      "Bash(php artisan migrate:*)"
+      "Bash(php artisan migrate:*)",
+      "mcp__laravel-boost__application-info",
+      "mcp__laravel-boost__list-routes",
+      "Bash(php artisan:*)",
+      "Bash(C:laragonbinphpphp-8.4.6-nts-Win32-vs17-x64php.exe artisan vendor:publish --provider=\"L5Swagger\\\\L5SwaggerServiceProvider\" --no-interaction)"
     ]
   }
 }

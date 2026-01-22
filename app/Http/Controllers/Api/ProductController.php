@@ -7,9 +7,41 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class ProductController extends Controller
 {
+    #[OA\Get(
+        path: '/products',
+        summary: 'Liste des produits',
+        description: 'Récupérer la liste paginée des produits actifs',
+        tags: ['Products'],
+        parameters: [
+            new OA\Parameter(name: 'category_id', in: 'query', description: 'Filtrer par catégorie', schema: new OA\Schema(type: 'string', format: 'uuid')),
+            new OA\Parameter(name: 'in_stock', in: 'query', description: 'Filtrer les produits en stock', schema: new OA\Schema(type: 'boolean')),
+            new OA\Parameter(name: 'per_page', in: 'query', description: 'Nombre de produits par page (max 50)', schema: new OA\Schema(type: 'integer', default: 12)),
+            new OA\Parameter(name: 'page', in: 'query', description: 'Numéro de page', schema: new OA\Schema(type: 'integer', default: 1)),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Liste des produits',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(
+                            property: 'data',
+                            type: 'object',
+                            properties: [
+                                new OA\Property(property: 'items', type: 'array', items: new OA\Items(ref: '#/components/schemas/Product')),
+                                new OA\Property(property: 'meta', ref: '#/components/schemas/PaginationMeta'),
+                            ]
+                        ),
+                    ]
+                )
+            ),
+        ]
+    )]
     public function index(Request $request): JsonResponse
     {
         $query = Product::query()
@@ -42,6 +74,24 @@ class ProductController extends Controller
         ]);
     }
 
+    #[OA\Get(
+        path: '/products/featured',
+        summary: 'Produits vedettes',
+        description: 'Récupérer les produits mis en avant',
+        tags: ['Products'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Produits vedettes',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Product')),
+                    ]
+                )
+            ),
+        ]
+    )]
     public function featured(): JsonResponse
     {
         $products = Product::query()
@@ -59,6 +109,28 @@ class ProductController extends Controller
         ]);
     }
 
+    #[OA\Get(
+        path: '/products/{id}',
+        summary: 'Détail d\'un produit',
+        description: 'Récupérer les détails d\'un produit par ID ou slug',
+        tags: ['Products'],
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, description: 'ID ou slug du produit', schema: new OA\Schema(type: 'string')),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Détail du produit',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'data', ref: '#/components/schemas/Product'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'Produit non trouvé'),
+        ]
+    )]
     public function show(string $id): JsonResponse
     {
         $product = Product::with('category')
@@ -73,6 +145,28 @@ class ProductController extends Controller
         ]);
     }
 
+    #[OA\Get(
+        path: '/products/search',
+        summary: 'Rechercher des produits',
+        description: 'Rechercher des produits par nom ou description',
+        tags: ['Products'],
+        parameters: [
+            new OA\Parameter(name: 'q', in: 'query', required: true, description: 'Terme de recherche (min 2 caractères)', schema: new OA\Schema(type: 'string', minLength: 2)),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Résultats de recherche',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Product')),
+                    ]
+                )
+            ),
+            new OA\Response(response: 422, description: 'Erreur de validation'),
+        ]
+    )]
     public function search(Request $request): JsonResponse
     {
         $request->validate([

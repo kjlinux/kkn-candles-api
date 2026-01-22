@@ -8,9 +8,30 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class CartController extends Controller
 {
+    #[OA\Get(
+        path: '/cart',
+        summary: 'Afficher le panier',
+        description: 'Récupérer le contenu du panier de l\'utilisateur connecté',
+        tags: ['Cart'],
+        security: [['bearerAuth' => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Contenu du panier',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'data', ref: '#/components/schemas/Cart'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+        ]
+    )]
     public function index(): JsonResponse
     {
         $cart = auth()->user()->getOrCreateCart();
@@ -22,6 +43,39 @@ class CartController extends Controller
         ]);
     }
 
+    #[OA\Post(
+        path: '/cart/items',
+        summary: 'Ajouter au panier',
+        description: 'Ajouter un produit au panier',
+        tags: ['Cart'],
+        security: [['bearerAuth' => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['product_id', 'quantity'],
+                properties: [
+                    new OA\Property(property: 'product_id', type: 'string', format: 'uuid', description: 'ID du produit'),
+                    new OA\Property(property: 'quantity', type: 'integer', minimum: 1, maximum: 100, example: 1),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Produit ajouté au panier',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'message', type: 'string', example: 'Produit ajouté au panier'),
+                        new OA\Property(property: 'data', ref: '#/components/schemas/Cart'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 400, description: 'Stock insuffisant ou produit non disponible'),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+            new OA\Response(response: 422, description: 'Erreur de validation'),
+        ]
+    )]
     public function addItem(Request $request): JsonResponse
     {
         $request->validate([
@@ -79,6 +133,42 @@ class CartController extends Controller
         ]);
     }
 
+    #[OA\Put(
+        path: '/cart/items/{item}',
+        summary: 'Modifier la quantité',
+        description: 'Modifier la quantité d\'un article dans le panier',
+        tags: ['Cart'],
+        security: [['bearerAuth' => []]],
+        parameters: [
+            new OA\Parameter(name: 'item', in: 'path', required: true, description: 'ID de l\'article du panier', schema: new OA\Schema(type: 'string', format: 'uuid')),
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['quantity'],
+                properties: [
+                    new OA\Property(property: 'quantity', type: 'integer', minimum: 1, maximum: 100, example: 2),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Quantité mise à jour',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'message', type: 'string', example: 'Quantité mise à jour'),
+                        new OA\Property(property: 'data', ref: '#/components/schemas/Cart'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 400, description: 'Stock insuffisant'),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+            new OA\Response(response: 403, description: 'Non autorisé'),
+            new OA\Response(response: 422, description: 'Erreur de validation'),
+        ]
+    )]
     public function updateItem(Request $request, CartItem $item): JsonResponse
     {
         if ($item->cart->user_id !== auth()->id()) {
@@ -112,6 +202,31 @@ class CartController extends Controller
         ]);
     }
 
+    #[OA\Delete(
+        path: '/cart/items/{item}',
+        summary: 'Retirer du panier',
+        description: 'Retirer un article du panier',
+        tags: ['Cart'],
+        security: [['bearerAuth' => []]],
+        parameters: [
+            new OA\Parameter(name: 'item', in: 'path', required: true, description: 'ID de l\'article du panier', schema: new OA\Schema(type: 'string', format: 'uuid')),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Article retiré du panier',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'message', type: 'string', example: 'Produit retiré du panier'),
+                        new OA\Property(property: 'data', ref: '#/components/schemas/Cart'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+            new OA\Response(response: 403, description: 'Non autorisé'),
+        ]
+    )]
     public function removeItem(CartItem $item): JsonResponse
     {
         if ($item->cart->user_id !== auth()->id()) {
@@ -133,6 +248,26 @@ class CartController extends Controller
         ]);
     }
 
+    #[OA\Delete(
+        path: '/cart',
+        summary: 'Vider le panier',
+        description: 'Supprimer tous les articles du panier',
+        tags: ['Cart'],
+        security: [['bearerAuth' => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Panier vidé',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'message', type: 'string', example: 'Panier vidé'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 401, description: 'Non authentifié'),
+        ]
+    )]
     public function clear(): JsonResponse
     {
         $cart = auth()->user()->cart;

@@ -6,9 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class ContactController extends Controller
 {
+    #[OA\Post(
+        path: '/contact',
+        summary: 'Envoyer un message de contact',
+        description: 'Envoyer un message via le formulaire de contact',
+        tags: ['Contact'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['name', 'email', 'subject', 'message'],
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', maxLength: 100, example: 'Jean Dupont'),
+                    new OA\Property(property: 'email', type: 'string', format: 'email', maxLength: 255, example: 'jean@example.com'),
+                    new OA\Property(property: 'phone', type: 'string', maxLength: 20, nullable: true, example: '+225 07 00 00 00 00'),
+                    new OA\Property(property: 'subject', type: 'string', maxLength: 200, example: 'Question sur une commande'),
+                    new OA\Property(property: 'message', type: 'string', maxLength: 2000, example: 'Bonjour, je souhaite avoir des informations sur...'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Message envoyé avec succès',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'success', type: 'boolean', example: true),
+                        new OA\Property(property: 'message', type: 'string', example: 'Votre message a été envoyé avec succès'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 422, description: 'Erreur de validation'),
+        ]
+    )]
     public function store(Request $request): JsonResponse
     {
         $request->validate([

@@ -1,0 +1,3834 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "KKN Candles API",
+        "description": "API pour la boutique de bougies KKN Candles",
+        "contact": {
+            "name": "Support KKN Candles",
+            "email": "support@kkncandles.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api",
+            "description": "Serveur API"
+        }
+    ],
+    "paths": {
+        "/admin/categories": {
+            "get": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Liste des catégories (Admin)",
+                "description": "Récupérer toutes les catégories avec filtrage optionnel",
+                "operationId": "c9d370a5ffd5b98edbb40db5be419cee",
+                "parameters": [
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrer par statut actif",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Créer une catégorie",
+                "description": "Créer une nouvelle catégorie",
+                "operationId": "41138cf423f5e7f784ea5dd54c193994",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "slug"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Bougies Parfumées"
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "bougies-parfumees"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "nullable": true
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "default": true
+                                    },
+                                    "sort_order": {
+                                        "type": "integer",
+                                        "default": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Catégorie créée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie créée avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/categories/{category}": {
+            "get": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Détail d'une catégorie (Admin)",
+                "description": "Récupérer les détails d'une catégorie",
+                "operationId": "7a352ceecb251b3985fb32e61182e80a",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "ID de la catégorie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail de la catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Modifier une catégorie",
+                "description": "Mettre à jour une catégorie existante",
+                "operationId": "5a34cb9416e27c316ff68cfcbca17e93",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "ID de la catégorie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "slug"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "nullable": true
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    },
+                                    "sort_order": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie mise à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie mise à jour"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Categories"
+                ],
+                "summary": "Supprimer une catégorie",
+                "description": "Supprimer une catégorie (impossible si elle contient des produits)",
+                "operationId": "c76799adb994ab20c79e468cbc309d62",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "ID de la catégorie",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Catégorie supprimée"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Catégorie contient des produits"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/dashboard": {
+            "get": {
+                "tags": [
+                    "Admin - Dashboard"
+                ],
+                "summary": "Tableau de bord administrateur",
+                "description": "Récupérer les statistiques et les commandes récentes pour le tableau de bord admin",
+                "operationId": "be686afcd6505f72ff70dfdc967493be",
+                "responses": {
+                    "200": {
+                        "description": "Statistiques du tableau de bord",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "stats": {
+                                                    "properties": {
+                                                        "orders": {
+                                                            "properties": {
+                                                                "total": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "today": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "this_month": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "pending": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "confirmed": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "processing": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "shipped": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "delivered": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "revenue": {
+                                                            "properties": {
+                                                                "total": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "today": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "this_month": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "products": {
+                                                            "properties": {
+                                                                "total": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "active": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "out_of_stock": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "low_stock": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "customers": {
+                                                            "properties": {
+                                                                "total": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "this_month": {
+                                                                    "type": "integer"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "recent_orders": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "string",
+                                                                "format": "uuid"
+                                                            },
+                                                            "order_number": {
+                                                                "type": "string"
+                                                            },
+                                                            "customer_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "total": {
+                                                                "type": "integer"
+                                                            },
+                                                            "status": {
+                                                                "type": "string"
+                                                            },
+                                                            "status_label": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé (non admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/media": {
+            "get": {
+                "tags": [
+                    "Admin - Media"
+                ],
+                "summary": "Liste des médias",
+                "description": "Récupérer la liste des fichiers médias uploadés",
+                "operationId": "4d5c364d0a540ee5a29213867656199e",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Filtrer par type",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "image",
+                                "video"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de médias par page (max 100)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des médias",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Media"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/media/upload": {
+            "post": {
+                "tags": [
+                    "Admin - Media"
+                ],
+                "summary": "Uploader un fichier",
+                "description": "Uploader une image ou une vidéo",
+                "operationId": "2eb8dba2975b1b5a8e8406306fd2b952",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "description": "Fichier à uploader",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "type": {
+                                        "description": "Type de fichier",
+                                        "type": "string",
+                                        "enum": [
+                                            "image",
+                                            "video"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fichier uploadé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Fichier uploadé avec succès"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "url": {
+                                                    "type": "string",
+                                                    "format": "url"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "image",
+                                                        "video"
+                                                    ]
+                                                },
+                                                "size": {
+                                                    "type": "string",
+                                                    "example": "1.5 MB"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/media/{media}": {
+            "delete": {
+                "tags": [
+                    "Admin - Media"
+                ],
+                "summary": "Supprimer un fichier",
+                "description": "Supprimer un fichier média",
+                "operationId": "6a2938535ebac855ec5eca2d2c15ba53",
+                "parameters": [
+                    {
+                        "name": "media",
+                        "in": "path",
+                        "description": "ID du média",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fichier supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Fichier supprimé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Média non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/orders": {
+            "get": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "Liste des commandes (Admin)",
+                "description": "Récupérer toutes les commandes avec filtrage et pagination",
+                "operationId": "f0a30422ae39690543a852d0833c2115",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrer par statut",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "confirmed",
+                                "processing",
+                                "shipped",
+                                "delivered",
+                                "cancelled"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Rechercher par numéro, email ou nom client",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de commandes par page (max 100)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des commandes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Order"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/orders/{order}": {
+            "get": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "Détail d'une commande (Admin)",
+                "description": "Récupérer les détails complets d'une commande",
+                "operationId": "042ec30909f822a52a8bb87b22e247f8",
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "description": "ID de la commande",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail de la commande",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/orders/{order}/status": {
+            "put": {
+                "tags": [
+                    "Admin - Orders"
+                ],
+                "summary": "Mettre à jour le statut d'une commande",
+                "description": "Modifier le statut d'une commande",
+                "operationId": "e752b414ad63b183a89a7921cb7fa873",
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "description": "ID de la commande",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "confirmed",
+                                            "processing",
+                                            "shipped",
+                                            "delivered",
+                                            "cancelled"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Statut mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Statut mis à jour"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Transition de statut invalide"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/products": {
+            "get": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Liste des produits (Admin)",
+                "description": "Récupérer tous les produits avec filtrage et pagination",
+                "operationId": "2c536fdba30bf94d8f127e47ab617917",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "Filtrer par catégorie",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrer par statut actif",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Rechercher par nom ou slug",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de produits par page (max 100)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des produits",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Product"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Créer un produit",
+                "description": "Créer un nouveau produit",
+                "operationId": "e048ab31940c05ee2bf01680df6f517c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "category_id",
+                                    "name",
+                                    "slug",
+                                    "price",
+                                    "stock_quantity"
+                                ],
+                                "properties": {
+                                    "category_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Bougie Parfumée Vanille"
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "bougie-parfumee-vanille"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "long_description": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "example": 5000
+                                    },
+                                    "stock_quantity": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "example": 100
+                                    },
+                                    "in_stock": {
+                                        "type": "boolean",
+                                        "default": true
+                                    },
+                                    "is_featured": {
+                                        "type": "boolean",
+                                        "default": false
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "default": true
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "url"
+                                        },
+                                        "nullable": true
+                                    },
+                                    "specifications": {
+                                        "type": "object",
+                                        "nullable": true
+                                    },
+                                    "sort_order": {
+                                        "type": "integer",
+                                        "default": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produit créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit créé avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/products/{product}": {
+            "get": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Détail d'un produit (Admin)",
+                "description": "Récupérer les détails d'un produit",
+                "operationId": "74c51c8e9b24aeef2d56fc58fd6ff283",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID du produit",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail du produit",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Modifier un produit",
+                "description": "Mettre à jour un produit existant",
+                "operationId": "53eeffa17f3df943dd336437fd8b0da7",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID du produit",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "category_id",
+                                    "name",
+                                    "slug",
+                                    "price",
+                                    "stock_quantity"
+                                ],
+                                "properties": {
+                                    "category_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "long_description": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "stock_quantity": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "in_stock": {
+                                        "type": "boolean"
+                                    },
+                                    "is_featured": {
+                                        "type": "boolean"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "url"
+                                        },
+                                        "nullable": true
+                                    },
+                                    "specifications": {
+                                        "type": "object",
+                                        "nullable": true
+                                    },
+                                    "sort_order": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produit mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit mis à jour"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Products"
+                ],
+                "summary": "Supprimer un produit",
+                "description": "Supprimer un produit",
+                "operationId": "19eac415b24ea6a0cda8896f3e1cfd53",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID du produit",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produit supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit supprimé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Inscription utilisateur",
+                "description": "Créer un nouveau compte utilisateur",
+                "operationId": "08136088c4862c313b35d6518bab8d3a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "first_name",
+                                    "last_name",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 6,
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Jean"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Dupont"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+225 07 00 00 00 00"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "example": "Cocody, Rue des Jardins"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Abidjan"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Inscription réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Inscription réussie"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "example": "bearer"
+                                                },
+                                                "expires_in": {
+                                                    "type": "integer",
+                                                    "example": 3600
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Connexion utilisateur",
+                "description": "Authentifier un utilisateur et obtenir un token JWT",
+                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Connexion réussie"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "example": "bearer"
+                                                },
+                                                "expires_in": {
+                                                    "type": "integer",
+                                                    "example": 3600
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email ou mot de passe incorrect"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Déconnexion",
+                "description": "Invalider le token JWT actuel",
+                "operationId": "6abf3b64a4bc7838d56346f05a5153af",
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déconnexion réussie"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Rafraîchir le token",
+                "description": "Obtenir un nouveau token JWT",
+                "operationId": "e7ab7446393758bb71fd1946a349e500",
+                "responses": {
+                    "200": {
+                        "description": "Token rafraîchi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "token_type": {
+                                                    "type": "string",
+                                                    "example": "bearer"
+                                                },
+                                                "expires_in": {
+                                                    "type": "integer",
+                                                    "example": 3600
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Profil utilisateur",
+                "description": "Obtenir les informations de l'utilisateur connecté",
+                "operationId": "7edae2cdbaafc10dff8c9c4198b320a2",
+                "responses": {
+                    "200": {
+                        "description": "Profil utilisateur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/profile": {
+            "put": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Mettre à jour le profil",
+                "description": "Modifier les informations du profil utilisateur",
+                "operationId": "1b6f918eb3f3cd3b4d27be8eb1979861",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Jean"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Dupont"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+225 07 00 00 00 00"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "example": "Cocody, Rue des Jardins"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Abidjan"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profil mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Profil mis à jour"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/password": {
+            "put": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Modifier le mot de passe",
+                "description": "Changer le mot de passe de l'utilisateur connecté",
+                "operationId": "97ed890cd4fef831fe8ed0bbca9609ef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "current_password",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "current_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "oldpassword"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "minLength": 6,
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mot de passe mis à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mot de passe mis à jour"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Mot de passe actuel incorrect"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cart": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Afficher le panier",
+                "description": "Récupérer le contenu du panier de l'utilisateur connecté",
+                "operationId": "a290eb330c4b625ab436b6e37cd1beda",
+                "responses": {
+                    "200": {
+                        "description": "Contenu du panier",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Cart"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Vider le panier",
+                "description": "Supprimer tous les articles du panier",
+                "operationId": "b2d116fa21a2a3a089c348d222b6d5d2",
+                "responses": {
+                    "200": {
+                        "description": "Panier vidé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Panier vidé"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cart/items": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Ajouter au panier",
+                "description": "Ajouter un produit au panier",
+                "operationId": "3f5b41db0dde62ca7a4424f2d997548f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "description": "ID du produit",
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "maximum": 100,
+                                        "minimum": 1,
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produit ajouté au panier",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit ajouté au panier"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Cart"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Stock insuffisant ou produit non disponible"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cart/items/{item}": {
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Modifier la quantité",
+                "description": "Modifier la quantité d'un article dans le panier",
+                "operationId": "1d9781aeeeb23c1d4665a74b17a2af46",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "description": "ID de l'article du panier",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer",
+                                        "maximum": 100,
+                                        "minimum": 1,
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Quantité mise à jour",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quantité mise à jour"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Cart"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Stock insuffisant"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Retirer du panier",
+                "description": "Retirer un article du panier",
+                "operationId": "2ad6fff40f0b1f02b51818b839c86970",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "description": "ID de l'article du panier",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Article retiré du panier",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Produit retiré du panier"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Cart"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Liste des catégories",
+                "description": "Récupérer toutes les catégories actives avec le nombre de produits",
+                "operationId": "b1b247b2b491b0491c3c728dc33f23f0",
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Détail d'une catégorie",
+                "description": "Récupérer les détails d'une catégorie par ID ou slug",
+                "operationId": "486849467f411ec5e4bdf111f50ede87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ou slug de la catégorie",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail de la catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Category"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                }
+            }
+        },
+        "/categories/{id}/products": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Produits d'une catégorie",
+                "description": "Récupérer les produits d'une catégorie spécifique",
+                "operationId": "47c253bd16a4077c31de648e22999f4f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ou slug de la catégorie",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de produits par page (max 50)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 12
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produits de la catégorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "category": {
+                                                    "$ref": "#/components/schemas/Category"
+                                                },
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Product"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée"
+                    }
+                }
+            }
+        },
+        "/contact": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Envoyer un message de contact",
+                "description": "Envoyer un message via le formulaire de contact",
+                "operationId": "3356e812494f1b29157eeb3640497bf6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "subject",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Jean Dupont"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 255,
+                                        "example": "jean@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+225 07 00 00 00 00",
+                                        "nullable": true
+                                    },
+                                    "subject": {
+                                        "type": "string",
+                                        "maxLength": 200,
+                                        "example": "Question sur une commande"
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "maxLength": 2000,
+                                        "example": "Bonjour, je souhaite avoir des informations sur..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Message envoyé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Votre message a été envoyé avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Liste des commandes",
+                "description": "Récupérer les commandes de l'utilisateur connecté",
+                "operationId": "8f3183bfa0ecb8a2c864cbf972b8061d",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de commandes par page (max 50)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des commandes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Order"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Créer une commande",
+                "description": "Créer une nouvelle commande",
+                "operationId": "b6490f9d9026dbe871b41207e118fffb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "phone",
+                                    "address",
+                                    "city",
+                                    "items"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Jean"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Dupont"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jean@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+225 07 00 00 00 00"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "example": "Cocody, Rue des Jardins"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Abidjan"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "example": "Livrer le matin",
+                                        "nullable": true
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "product_id",
+                                                "quantity"
+                                            ],
+                                            "properties": {
+                                                "product_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "maximum": 100,
+                                                    "minimum": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Commande créée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Commande créée avec succès"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur lors de la création de la commande"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/orders/{order}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Détail d'une commande",
+                "description": "Récupérer les détails d'une commande",
+                "operationId": "3a2d78e76e9fc3f06bb879fb7d48b40d",
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "description": "ID de la commande",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail de la commande",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Order"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/payments/cinetpay/init": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Initialiser un paiement CinetPay",
+                "description": "Initialiser un paiement via CinetPay pour une commande",
+                "operationId": "1634b6ce0d2ae5cd61de2f684baa90f2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "order_id"
+                                ],
+                                "properties": {
+                                    "order_id": {
+                                        "description": "ID de la commande à payer",
+                                        "type": "string",
+                                        "format": "uuid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paiement initialisé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Paiement initialisé"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "payment_url": {
+                                                    "description": "URL de paiement CinetPay",
+                                                    "type": "string",
+                                                    "format": "url"
+                                                },
+                                                "transaction_id": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Commande non payable"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "404": {
+                        "description": "Commande non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'initialisation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/payments/cinetpay/notify": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Webhook de notification CinetPay",
+                "description": "Endpoint pour recevoir les notifications de paiement de CinetPay (appelé par CinetPay)",
+                "operationId": "ffc79e88d1341669a67e8199b4d660a0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cpm_trans_id": {
+                                        "type": "string"
+                                    },
+                                    "cpm_site_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Notification traitée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Notification traitée"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erreur de traitement"
+                    }
+                }
+            }
+        },
+        "/payments/cinetpay/return": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Page de retour CinetPay",
+                "description": "Page de retour après paiement CinetPay",
+                "operationId": "0726388509ff6774f755f80a4fb98415",
+                "parameters": [
+                    {
+                        "name": "transaction_id",
+                        "in": "query",
+                        "description": "ID de la transaction",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut du paiement",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "payment_status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pending",
+                                                        "completed",
+                                                        "failed",
+                                                        "cancelled"
+                                                    ]
+                                                },
+                                                "order_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "order_status": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Transaction ID manquant"
+                    },
+                    "404": {
+                        "description": "Paiement non trouvé"
+                    }
+                }
+            }
+        },
+        "/payments/{payment}/status": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Statut d'un paiement",
+                "description": "Vérifier le statut d'un paiement",
+                "operationId": "2a19665a22c44f9ce40c82d260a9b986",
+                "parameters": [
+                    {
+                        "name": "payment",
+                        "in": "path",
+                        "description": "ID du paiement",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Statut du paiement",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pending",
+                                                        "completed",
+                                                        "failed",
+                                                        "cancelled"
+                                                    ]
+                                                },
+                                                "amount": {
+                                                    "type": "integer"
+                                                },
+                                                "payment_method": {
+                                                    "type": "string"
+                                                },
+                                                "completed_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "404": {
+                        "description": "Paiement non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Liste des produits",
+                "description": "Récupérer la liste paginée des produits actifs",
+                "operationId": "080f057905dc32d2f11065d606dc4cd6",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "description": "Filtrer par catégorie",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "in_stock",
+                        "in": "query",
+                        "description": "Filtrer les produits en stock",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Nombre de produits par page (max 50)",
+                        "schema": {
+                            "type": "integer",
+                            "default": 12
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des produits",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "items": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Product"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/PaginationMeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/featured": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Produits vedettes",
+                "description": "Récupérer les produits mis en avant",
+                "operationId": "dad9b6ffb440386cc792c80e4fdb46fa",
+                "responses": {
+                    "200": {
+                        "description": "Produits vedettes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Product"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Détail d'un produit",
+                "description": "Récupérer les détails d'un produit par ID ou slug",
+                "operationId": "b5099368868dbe7900acd129345eb148",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ou slug du produit",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détail du produit",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produit non trouvé"
+                    }
+                }
+            }
+        },
+        "/products/search": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Rechercher des produits",
+                "description": "Rechercher des produits par nom ou description",
+                "operationId": "a3211e37d25c399811b6118eb88e49af",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Terme de recherche (min 2 caractères)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "minLength": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Résultats de recherche",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Product"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "title": "User",
+                "description": "Modèle utilisateur",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "9e5f1c2a-3b4d-5e6f-7g8h-9i0j1k2l3m4n"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "example": "Jean"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "example": "Dupont"
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "example": "Jean Dupont"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+225 07 00 00 00 00"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Cocody, Rue des Jardins",
+                        "nullable": true
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Abidjan",
+                        "nullable": true
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "customer",
+                            "admin"
+                        ],
+                        "example": "customer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "title": "Product",
+                "description": "Modèle produit",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "category_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "category": {
+                        "$ref": "#/components/schemas/Category"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Bougie Parfumée Vanille"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "bougie-parfumee-vanille"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "long_description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "integer",
+                        "example": 5000
+                    },
+                    "formatted_price": {
+                        "type": "string",
+                        "example": "5 000 FCFA"
+                    },
+                    "stock_quantity": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "in_stock": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "is_featured": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "url"
+                        }
+                    },
+                    "main_image": {
+                        "type": "string",
+                        "format": "url",
+                        "nullable": true
+                    },
+                    "specifications": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "sort_order": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Category": {
+                "title": "Category",
+                "description": "Modèle catégorie",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Bougies Parfumées"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "bougies-parfumees"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "format": "url",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "sort_order": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "products_count": {
+                        "type": "integer",
+                        "example": 15
+                    }
+                },
+                "type": "object"
+            },
+            "Cart": {
+                "title": "Cart",
+                "description": "Modèle panier",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CartItem"
+                        }
+                    },
+                    "items_count": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 15000
+                    },
+                    "formatted_total": {
+                        "type": "string",
+                        "example": "15 000 FCFA"
+                    }
+                },
+                "type": "object"
+            },
+            "CartItem": {
+                "title": "CartItem",
+                "description": "Article du panier",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "product": {
+                        "$ref": "#/components/schemas/Product"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "unit_price": {
+                        "type": "integer",
+                        "example": 5000
+                    },
+                    "subtotal": {
+                        "type": "integer",
+                        "example": 10000
+                    }
+                },
+                "type": "object"
+            },
+            "Order": {
+                "title": "Order",
+                "description": "Modèle commande",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "order_number": {
+                        "type": "string",
+                        "example": "KKN-20240101-0001"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "confirmed",
+                            "processing",
+                            "shipped",
+                            "delivered",
+                            "cancelled"
+                        ]
+                    },
+                    "status_label": {
+                        "type": "string",
+                        "example": "En attente"
+                    },
+                    "customer": {
+                        "properties": {
+                            "first_name": {
+                                "type": "string"
+                            },
+                            "last_name": {
+                                "type": "string"
+                            },
+                            "full_name": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string",
+                                "format": "email"
+                            },
+                            "phone": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "shipping": {
+                        "properties": {
+                            "address": {
+                                "type": "string"
+                            },
+                            "city": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "subtotal": {
+                        "type": "integer",
+                        "example": 15000
+                    },
+                    "shipping_cost": {
+                        "type": "integer",
+                        "example": 2000
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 17000
+                    },
+                    "formatted_total": {
+                        "type": "string",
+                        "example": "17 000 FCFA"
+                    },
+                    "notes": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderItem"
+                        }
+                    },
+                    "payment": {
+                        "$ref": "#/components/schemas/Payment"
+                    },
+                    "paid_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderItem": {
+                "title": "OrderItem",
+                "description": "Article de commande",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "product_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "product_name": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "unit_price": {
+                        "type": "integer",
+                        "example": 5000
+                    },
+                    "subtotal": {
+                        "type": "integer",
+                        "example": 10000
+                    }
+                },
+                "type": "object"
+            },
+            "Payment": {
+                "title": "Payment",
+                "description": "Modèle paiement",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "transaction_id": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "example": 17000
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "XOF"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "completed",
+                            "failed",
+                            "cancelled"
+                        ]
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "example": "cinetpay"
+                    },
+                    "operator": {
+                        "type": "string",
+                        "example": "ORANGE",
+                        "nullable": true
+                    },
+                    "completed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Media": {
+                "title": "Media",
+                "description": "Modèle média",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "image",
+                            "video"
+                        ]
+                    },
+                    "filename": {
+                        "type": "string"
+                    },
+                    "original_filename": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "formatted_size": {
+                        "type": "string",
+                        "example": "1.5 MB"
+                    },
+                    "width": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "height": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "title": "PaginationMeta",
+                "description": "Métadonnées de pagination",
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 120
+                    }
+                },
+                "type": "object"
+            },
+            "SuccessResponse": {
+                "title": "SuccessResponse",
+                "description": "Réponse de succès générique",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "title": "ErrorResponse",
+                "description": "Réponse d'erreur générique",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Authentification JWT Bearer Token",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authentification et gestion du compte"
+        },
+        {
+            "name": "Products",
+            "description": "Catalogue de produits"
+        },
+        {
+            "name": "Categories",
+            "description": "Catégories de produits"
+        },
+        {
+            "name": "Cart",
+            "description": "Gestion du panier"
+        },
+        {
+            "name": "Orders",
+            "description": "Gestion des commandes"
+        },
+        {
+            "name": "Payments",
+            "description": "Paiements CinetPay"
+        },
+        {
+            "name": "Contact",
+            "description": "Formulaire de contact"
+        },
+        {
+            "name": "Admin - Dashboard",
+            "description": "Tableau de bord administrateur"
+        },
+        {
+            "name": "Admin - Categories",
+            "description": "Gestion des catégories (Admin)"
+        },
+        {
+            "name": "Admin - Products",
+            "description": "Gestion des produits (Admin)"
+        },
+        {
+            "name": "Admin - Orders",
+            "description": "Gestion des commandes (Admin)"
+        },
+        {
+            "name": "Admin - Media",
+            "description": "Gestion des médias (Admin)"
+        }
+    ]
+}
