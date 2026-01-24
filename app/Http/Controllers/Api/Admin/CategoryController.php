@@ -14,6 +14,7 @@ class CategoryController extends Controller
 {
     #[OA\Get(
         path: '/admin/categories',
+        operationId: 'adminGetCategories',
         summary: 'Liste des catégories (Admin)',
         description: 'Récupérer toutes les catégories avec filtrage optionnel',
         tags: ['Admin - Categories'],
@@ -48,12 +49,13 @@ class CategoryController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => CategoryResource::collection($categories)
+            'data' => CategoryResource::collection($categories),
         ]);
     }
 
     #[OA\Post(
         path: '/admin/categories',
+        operationId: 'adminCreateCategory',
         summary: 'Créer une catégorie',
         description: 'Créer une nouvelle catégorie',
         tags: ['Admin - Categories'],
@@ -96,12 +98,13 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Catégorie créée avec succès',
-            'data' => new CategoryResource($category)
+            'data' => new CategoryResource($category),
         ], 201);
     }
 
     #[OA\Get(
         path: '/admin/categories/{category}',
+        operationId: 'adminGetCategory',
         summary: 'Détail d\'une catégorie (Admin)',
         description: 'Récupérer les détails d\'une catégorie',
         tags: ['Admin - Categories'],
@@ -129,12 +132,13 @@ class CategoryController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new CategoryResource($category->loadCount('products'))
+            'data' => new CategoryResource($category->loadCount('products')),
         ]);
     }
 
     #[OA\Put(
         path: '/admin/categories/{category}',
+        operationId: 'adminUpdateCategory',
         summary: 'Modifier une catégorie',
         description: 'Mettre à jour une catégorie existante',
         tags: ['Admin - Categories'],
@@ -181,12 +185,13 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Catégorie mise à jour',
-            'data' => new CategoryResource($category->fresh())
+            'data' => new CategoryResource($category->fresh()),
         ]);
     }
 
     #[OA\Delete(
         path: '/admin/categories/{category}',
+        operationId: 'adminDeleteCategory',
         summary: 'Supprimer une catégorie',
         description: 'Supprimer une catégorie (impossible si elle contient des produits)',
         tags: ['Admin - Categories'],
@@ -216,7 +221,7 @@ class CategoryController extends Controller
         if ($category->products()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Impossible de supprimer une catégorie contenant des produits'
+                'message' => 'Impossible de supprimer une catégorie contenant des produits',
             ], 400);
         }
 
@@ -224,7 +229,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Catégorie supprimée'
+            'message' => 'Catégorie supprimée',
         ]);
     }
 }

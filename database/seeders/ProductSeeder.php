@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
@@ -26,7 +27,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 50,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/1.jpg'],
+                'images' => [$this->getMediaUrl('1.jpg')],
                 'sort_order' => 1,
             ],
             [
@@ -38,7 +39,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 30,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/2.jpg'],
+                'images' => [$this->getMediaUrl('2.jpg')],
                 'sort_order' => 2,
             ],
             [
@@ -50,7 +51,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 25,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/3.jpg'],
+                'images' => [$this->getMediaUrl('3.jpg')],
                 'sort_order' => 3,
             ],
             [
@@ -62,7 +63,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 40,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/4.jpg'],
+                'images' => [$this->getMediaUrl('4.jpg')],
                 'sort_order' => 4,
             ],
 
@@ -76,7 +77,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 15,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/5.jpg'],
+                'images' => [$this->getMediaUrl('5.jpg')],
                 'sort_order' => 5,
             ],
             [
@@ -88,7 +89,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 20,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/6.jpg'],
+                'images' => [$this->getMediaUrl('6.jpg')],
                 'sort_order' => 6,
             ],
             [
@@ -100,7 +101,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 30,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/7.jpg'],
+                'images' => [$this->getMediaUrl('7.jpg')],
                 'sort_order' => 7,
             ],
             [
@@ -112,7 +113,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 25,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/8.jpg'],
+                'images' => [$this->getMediaUrl('8.jpg')],
                 'sort_order' => 8,
             ],
 
@@ -126,7 +127,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 10,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/9.jpg'],
+                'images' => [$this->getMediaUrl('9.jpg')],
                 'sort_order' => 9,
             ],
             [
@@ -138,7 +139,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 10,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/10.jpg'],
+                'images' => [$this->getMediaUrl('10.jpg')],
                 'sort_order' => 10,
             ],
             [
@@ -150,7 +151,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 20,
                 'in_stock' => true,
                 'is_featured' => true,
-                'images' => ['/pictures/11.jpg'],
+                'images' => [$this->getMediaUrl('11.jpg')],
                 'sort_order' => 11,
             ],
             [
@@ -162,7 +163,7 @@ class ProductSeeder extends Seeder
                 'stock_quantity' => 8,
                 'in_stock' => true,
                 'is_featured' => false,
-                'images' => ['/pictures/12.jpg'],
+                'images' => [$this->getMediaUrl('12.jpg')],
                 'sort_order' => 12,
             ],
         ];
@@ -170,5 +171,16 @@ class ProductSeeder extends Seeder
         foreach ($products as $product) {
             Product::create($product);
         }
+    }
+
+    private function getMediaUrl(string $filename): string
+    {
+        $media = Media::where('original_filename', $filename)->first();
+
+        if ($media) {
+            return $media->url;
+        }
+
+        return "/pictures/{$filename}";
     }
 }

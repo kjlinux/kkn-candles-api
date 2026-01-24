@@ -23,7 +23,7 @@
                 ],
                 "summary": "Liste des catégories (Admin)",
                 "description": "Récupérer toutes les catégories avec filtrage optionnel",
-                "operationId": "c9d370a5ffd5b98edbb40db5be419cee",
+                "operationId": "adminGetCategories",
                 "parameters": [
                     {
                         "name": "is_active",
@@ -76,7 +76,7 @@
                 ],
                 "summary": "Créer une catégorie",
                 "description": "Créer une nouvelle catégorie",
-                "operationId": "41138cf423f5e7f784ea5dd54c193994",
+                "operationId": "adminCreateCategory",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -169,7 +169,7 @@
                 ],
                 "summary": "Détail d'une catégorie (Admin)",
                 "description": "Récupérer les détails d'une catégorie",
-                "operationId": "7a352ceecb251b3985fb32e61182e80a",
+                "operationId": "adminGetCategory",
                 "parameters": [
                     {
                         "name": "category",
@@ -224,7 +224,7 @@
                 ],
                 "summary": "Modifier une catégorie",
                 "description": "Mettre à jour une catégorie existante",
-                "operationId": "5a34cb9416e27c316ff68cfcbca17e93",
+                "operationId": "adminUpdateCategory",
                 "parameters": [
                     {
                         "name": "category",
@@ -326,7 +326,7 @@
                 ],
                 "summary": "Supprimer une catégorie",
                 "description": "Supprimer une catégorie (impossible si elle contient des produits)",
-                "operationId": "c76799adb994ab20c79e468cbc309d62",
+                "operationId": "adminDeleteCategory",
                 "parameters": [
                     {
                         "name": "category",
@@ -387,7 +387,7 @@
                 ],
                 "summary": "Tableau de bord administrateur",
                 "description": "Récupérer les statistiques et les commandes récentes pour le tableau de bord admin",
-                "operationId": "be686afcd6505f72ff70dfdc967493be",
+                "operationId": "adminGetDashboard",
                 "responses": {
                     "200": {
                         "description": "Statistiques du tableau de bord",
@@ -538,7 +538,7 @@
                 ],
                 "summary": "Liste des médias",
                 "description": "Récupérer la liste des fichiers médias uploadés",
-                "operationId": "4d5c364d0a540ee5a29213867656199e",
+                "operationId": "adminGetMedia",
                 "parameters": [
                     {
                         "name": "type",
@@ -623,7 +623,7 @@
                 ],
                 "summary": "Uploader un fichier",
                 "description": "Uploader une image ou une vidéo",
-                "operationId": "2eb8dba2975b1b5a8e8406306fd2b952",
+                "operationId": "adminUploadMedia",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -722,7 +722,7 @@
                 ],
                 "summary": "Supprimer un fichier",
                 "description": "Supprimer un fichier média",
-                "operationId": "6a2938535ebac855ec5eca2d2c15ba53",
+                "operationId": "adminDeleteMedia",
                 "parameters": [
                     {
                         "name": "media",
@@ -780,7 +780,7 @@
                 ],
                 "summary": "Liste des commandes (Admin)",
                 "description": "Récupérer toutes les commandes avec filtrage et pagination",
-                "operationId": "f0a30422ae39690543a852d0833c2115",
+                "operationId": "adminGetOrders",
                 "parameters": [
                     {
                         "name": "status",
@@ -877,7 +877,7 @@
                 ],
                 "summary": "Détail d'une commande (Admin)",
                 "description": "Récupérer les détails complets d'une commande",
-                "operationId": "042ec30909f822a52a8bb87b22e247f8",
+                "operationId": "adminGetOrder",
                 "parameters": [
                     {
                         "name": "order",
@@ -934,7 +934,7 @@
                 ],
                 "summary": "Mettre à jour le statut d'une commande",
                 "description": "Modifier le statut d'une commande",
-                "operationId": "e752b414ad63b183a89a7921cb7fa873",
+                "operationId": "adminUpdateOrderStatus",
                 "parameters": [
                     {
                         "name": "order",
@@ -1026,7 +1026,7 @@
                 ],
                 "summary": "Liste des produits (Admin)",
                 "description": "Récupérer tous les produits avec filtrage et pagination",
-                "operationId": "2c536fdba30bf94d8f127e47ab617917",
+                "operationId": "adminGetProducts",
                 "parameters": [
                     {
                         "name": "category_id",
@@ -1122,7 +1122,7 @@
                 ],
                 "summary": "Créer un produit",
                 "description": "Créer un nouveau produit",
-                "operationId": "e048ab31940c05ee2bf01680df6f517c",
+                "operationId": "adminCreateProduct",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1251,7 +1251,7 @@
                 ],
                 "summary": "Détail d'un produit (Admin)",
                 "description": "Récupérer les détails d'un produit",
-                "operationId": "74c51c8e9b24aeef2d56fc58fd6ff283",
+                "operationId": "adminGetProduct",
                 "parameters": [
                     {
                         "name": "product",
@@ -1306,7 +1306,7 @@
                 ],
                 "summary": "Modifier un produit",
                 "description": "Mettre à jour un produit existant",
-                "operationId": "53eeffa17f3df943dd336437fd8b0da7",
+                "operationId": "adminUpdateProduct",
                 "parameters": [
                     {
                         "name": "product",
@@ -1440,7 +1440,7 @@
                 ],
                 "summary": "Supprimer un produit",
                 "description": "Supprimer un produit",
-                "operationId": "19eac415b24ea6a0cda8896f3e1cfd53",
+                "operationId": "adminDeleteProduct",
                 "parameters": [
                     {
                         "name": "product",
@@ -1498,7 +1498,7 @@
                 ],
                 "summary": "Inscription utilisateur",
                 "description": "Créer un nouveau compte utilisateur",
-                "operationId": "08136088c4862c313b35d6518bab8d3a",
+                "operationId": "authRegister",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1613,7 +1613,7 @@
                 ],
                 "summary": "Connexion utilisateur",
                 "description": "Authentifier un utilisateur et obtenir un token JWT",
-                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "operationId": "authLogin",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1696,7 +1696,7 @@
                 ],
                 "summary": "Déconnexion",
                 "description": "Invalider le token JWT actuel",
-                "operationId": "6abf3b64a4bc7838d56346f05a5153af",
+                "operationId": "authLogout",
                 "responses": {
                     "200": {
                         "description": "Déconnexion réussie",
@@ -1736,7 +1736,7 @@
                 ],
                 "summary": "Rafraîchir le token",
                 "description": "Obtenir un nouveau token JWT",
-                "operationId": "e7ab7446393758bb71fd1946a349e500",
+                "operationId": "authRefreshToken",
                 "responses": {
                     "200": {
                         "description": "Token rafraîchi",
@@ -1788,7 +1788,7 @@
                 ],
                 "summary": "Profil utilisateur",
                 "description": "Obtenir les informations de l'utilisateur connecté",
-                "operationId": "7edae2cdbaafc10dff8c9c4198b320a2",
+                "operationId": "authGetCurrentUser",
                 "responses": {
                     "200": {
                         "description": "Profil utilisateur",
@@ -1827,7 +1827,7 @@
                 ],
                 "summary": "Mettre à jour le profil",
                 "description": "Modifier les informations du profil utilisateur",
-                "operationId": "1b6f918eb3f3cd3b4d27be8eb1979861",
+                "operationId": "authUpdateProfile",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1910,7 +1910,7 @@
                 ],
                 "summary": "Modifier le mot de passe",
                 "description": "Changer le mot de passe de l'utilisateur connecté",
-                "operationId": "97ed890cd4fef831fe8ed0bbca9609ef",
+                "operationId": "authUpdatePassword",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1989,7 +1989,7 @@
                 ],
                 "summary": "Afficher le panier",
                 "description": "Récupérer le contenu du panier de l'utilisateur connecté",
-                "operationId": "a290eb330c4b625ab436b6e37cd1beda",
+                "operationId": "getCart",
                 "responses": {
                     "200": {
                         "description": "Contenu du panier",
@@ -2026,7 +2026,7 @@
                 ],
                 "summary": "Vider le panier",
                 "description": "Supprimer tous les articles du panier",
-                "operationId": "b2d116fa21a2a3a089c348d222b6d5d2",
+                "operationId": "clearCart",
                 "responses": {
                     "200": {
                         "description": "Panier vidé",
@@ -2066,7 +2066,7 @@
                 ],
                 "summary": "Ajouter au panier",
                 "description": "Ajouter un produit au panier",
-                "operationId": "3f5b41db0dde62ca7a4424f2d997548f",
+                "operationId": "addCartItem",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2142,7 +2142,7 @@
                 ],
                 "summary": "Modifier la quantité",
                 "description": "Modifier la quantité d'un article dans le panier",
-                "operationId": "1d9781aeeeb23c1d4665a74b17a2af46",
+                "operationId": "updateCartItem",
                 "parameters": [
                     {
                         "name": "item",
@@ -2225,7 +2225,7 @@
                 ],
                 "summary": "Retirer du panier",
                 "description": "Retirer un article du panier",
-                "operationId": "2ad6fff40f0b1f02b51818b839c86970",
+                "operationId": "removeCartItem",
                 "parameters": [
                     {
                         "name": "item",
@@ -2283,7 +2283,7 @@
                 ],
                 "summary": "Liste des catégories",
                 "description": "Récupérer toutes les catégories actives avec le nombre de produits",
-                "operationId": "b1b247b2b491b0491c3c728dc33f23f0",
+                "operationId": "getCategories",
                 "responses": {
                     "200": {
                         "description": "Liste des catégories",
@@ -2317,7 +2317,7 @@
                 ],
                 "summary": "Détail d'une catégorie",
                 "description": "Récupérer les détails d'une catégorie par ID ou slug",
-                "operationId": "486849467f411ec5e4bdf111f50ede87",
+                "operationId": "getCategory",
                 "parameters": [
                     {
                         "name": "id",
@@ -2362,7 +2362,7 @@
                 ],
                 "summary": "Produits d'une catégorie",
                 "description": "Récupérer les produits d'une catégorie spécifique",
-                "operationId": "47c253bd16a4077c31de648e22999f4f",
+                "operationId": "getCategoryProducts",
                 "parameters": [
                     {
                         "name": "id",
@@ -2439,7 +2439,7 @@
                 ],
                 "summary": "Envoyer un message de contact",
                 "description": "Envoyer un message via le formulaire de contact",
-                "operationId": "3356e812494f1b29157eeb3640497bf6",
+                "operationId": "sendContactMessage",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2519,7 +2519,7 @@
                 ],
                 "summary": "Liste des commandes",
                 "description": "Récupérer les commandes de l'utilisateur connecté",
-                "operationId": "8f3183bfa0ecb8a2c864cbf972b8061d",
+                "operationId": "getOrders",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -2587,7 +2587,7 @@
                 ],
                 "summary": "Créer une commande",
                 "description": "Créer une nouvelle commande",
-                "operationId": "b6490f9d9026dbe871b41207e118fffb",
+                "operationId": "createOrder",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2714,7 +2714,7 @@
                 ],
                 "summary": "Détail d'une commande",
                 "description": "Récupérer les détails d'une commande",
-                "operationId": "3a2d78e76e9fc3f06bb879fb7d48b40d",
+                "operationId": "getOrder",
                 "parameters": [
                     {
                         "name": "order",
@@ -2768,7 +2768,7 @@
                 ],
                 "summary": "Initialiser un paiement CinetPay",
                 "description": "Initialiser un paiement via CinetPay pour une commande",
-                "operationId": "1634b6ce0d2ae5cd61de2f684baa90f2",
+                "operationId": "initCinetpayPayment",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2850,7 +2850,7 @@
                 ],
                 "summary": "Webhook de notification CinetPay",
                 "description": "Endpoint pour recevoir les notifications de paiement de CinetPay (appelé par CinetPay)",
-                "operationId": "ffc79e88d1341669a67e8199b4d660a0",
+                "operationId": "cinetpayNotifyWebhook",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2903,7 +2903,7 @@
                 ],
                 "summary": "Page de retour CinetPay",
                 "description": "Page de retour après paiement CinetPay",
-                "operationId": "0726388509ff6774f755f80a4fb98415",
+                "operationId": "cinetpayReturnPage",
                 "parameters": [
                     {
                         "name": "transaction_id",
@@ -2969,7 +2969,7 @@
                 ],
                 "summary": "Statut d'un paiement",
                 "description": "Vérifier le statut d'un paiement",
-                "operationId": "2a19665a22c44f9ce40c82d260a9b986",
+                "operationId": "getPaymentStatus",
                 "parameters": [
                     {
                         "name": "payment",
@@ -3049,7 +3049,7 @@
                 ],
                 "summary": "Liste des produits",
                 "description": "Récupérer la liste paginée des produits actifs",
-                "operationId": "080f057905dc32d2f11065d606dc4cd6",
+                "operationId": "getProducts",
                 "parameters": [
                     {
                         "name": "category_id",
@@ -3128,7 +3128,7 @@
                 ],
                 "summary": "Produits vedettes",
                 "description": "Récupérer les produits mis en avant",
-                "operationId": "dad9b6ffb440386cc792c80e4fdb46fa",
+                "operationId": "getFeaturedProducts",
                 "responses": {
                     "200": {
                         "description": "Produits vedettes",
@@ -3162,7 +3162,7 @@
                 ],
                 "summary": "Détail d'un produit",
                 "description": "Récupérer les détails d'un produit par ID ou slug",
-                "operationId": "b5099368868dbe7900acd129345eb148",
+                "operationId": "getProduct",
                 "parameters": [
                     {
                         "name": "id",
@@ -3207,7 +3207,7 @@
                 ],
                 "summary": "Rechercher des produits",
                 "description": "Rechercher des produits par nom ou description",
-                "operationId": "a3211e37d25c399811b6118eb88e49af",
+                "operationId": "searchProducts",
                 "parameters": [
                     {
                         "name": "q",

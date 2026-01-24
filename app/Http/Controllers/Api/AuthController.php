@@ -17,6 +17,7 @@ class AuthController extends Controller
 {
     #[OA\Post(
         path: '/auth/register',
+        operationId: 'authRegister',
         summary: 'Inscription utilisateur',
         description: 'Créer un nouveau compte utilisateur',
         tags: ['Auth'],
@@ -83,12 +84,13 @@ class AuthController extends Controller
                 'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => config('jwt.ttl') * 60,
-            ]
+            ],
         ], 201);
     }
 
     #[OA\Post(
         path: '/auth/login',
+        operationId: 'authLogin',
         summary: 'Connexion utilisateur',
         description: 'Authentifier un utilisateur et obtenir un token JWT',
         tags: ['Auth'],
@@ -131,10 +133,10 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (!$token = JWTAuth::attempt($credentials)) {
+        if (! $token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Email ou mot de passe incorrect'
+                'message' => 'Email ou mot de passe incorrect',
             ], 401);
         }
 
@@ -148,12 +150,13 @@ class AuthController extends Controller
                 'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => config('jwt.ttl') * 60,
-            ]
+            ],
         ]);
     }
 
     #[OA\Post(
         path: '/auth/logout',
+        operationId: 'authLogout',
         summary: 'Déconnexion',
         description: 'Invalider le token JWT actuel',
         tags: ['Auth'],
@@ -178,12 +181,13 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Déconnexion réussie'
+            'message' => 'Déconnexion réussie',
         ]);
     }
 
     #[OA\Post(
         path: '/auth/refresh',
+        operationId: 'authRefreshToken',
         summary: 'Rafraîchir le token',
         description: 'Obtenir un nouveau token JWT',
         tags: ['Auth'],
@@ -220,12 +224,13 @@ class AuthController extends Controller
                 'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => config('jwt.ttl') * 60,
-            ]
+            ],
         ]);
     }
 
     #[OA\Get(
         path: '/auth/me',
+        operationId: 'authGetCurrentUser',
         summary: 'Profil utilisateur',
         description: 'Obtenir les informations de l\'utilisateur connecté',
         tags: ['Auth'],
@@ -248,12 +253,13 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new UserResource(auth()->user())
+            'data' => new UserResource(auth()->user()),
         ]);
     }
 
     #[OA\Put(
         path: '/auth/profile',
+        operationId: 'authUpdateProfile',
         summary: 'Mettre à jour le profil',
         description: 'Modifier les informations du profil utilisateur',
         tags: ['Auth'],
@@ -309,12 +315,13 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Profil mis à jour',
-            'data' => new UserResource($user->fresh())
+            'data' => new UserResource($user->fresh()),
         ]);
     }
 
     #[OA\Put(
         path: '/auth/password',
+        operationId: 'authUpdatePassword',
         summary: 'Modifier le mot de passe',
         description: 'Changer le mot de passe de l\'utilisateur connecté',
         tags: ['Auth'],
@@ -355,10 +362,10 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Le mot de passe actuel est incorrect'
+                'message' => 'Le mot de passe actuel est incorrect',
             ], 400);
         }
 
@@ -368,7 +375,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Mot de passe mis à jour'
+            'message' => 'Mot de passe mis à jour',
         ]);
     }
 }

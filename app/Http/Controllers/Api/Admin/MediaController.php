@@ -17,6 +17,7 @@ class MediaController extends Controller
 
     #[OA\Get(
         path: '/admin/media',
+        operationId: 'adminGetMedia',
         summary: 'Liste des médias',
         description: 'Récupérer la liste des fichiers médias uploadés',
         tags: ['Admin - Media'],
@@ -62,7 +63,7 @@ class MediaController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'items' => $media->map(fn($m) => [
+                'items' => $media->map(fn ($m) => [
                     'id' => $m->id,
                     'url' => $m->url,
                     'type' => $m->type,
@@ -79,13 +80,14 @@ class MediaController extends Controller
                     'last_page' => $media->lastPage(),
                     'per_page' => $media->perPage(),
                     'total' => $media->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     #[OA\Post(
         path: '/admin/media/upload',
+        operationId: 'adminUploadMedia',
         summary: 'Uploader un fichier',
         description: 'Uploader une image ou une vidéo',
         tags: ['Admin - Media'],
@@ -159,12 +161,13 @@ class MediaController extends Controller
                 'url' => $media->url,
                 'type' => $media->type,
                 'size' => $media->formatted_size,
-            ]
+            ],
         ], 201);
     }
 
     #[OA\Delete(
         path: '/admin/media/{media}',
+        operationId: 'adminDeleteMedia',
         summary: 'Supprimer un fichier',
         description: 'Supprimer un fichier média',
         tags: ['Admin - Media'],
@@ -194,7 +197,7 @@ class MediaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Fichier supprimé'
+            'message' => 'Fichier supprimé',
         ]);
     }
 }

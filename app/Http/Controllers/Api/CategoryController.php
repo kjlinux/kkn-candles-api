@@ -14,6 +14,7 @@ class CategoryController extends Controller
 {
     #[OA\Get(
         path: '/categories',
+        operationId: 'getCategories',
         summary: 'Liste des catégories',
         description: 'Récupérer toutes les catégories actives avec le nombre de produits',
         tags: ['Categories'],
@@ -40,12 +41,13 @@ class CategoryController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => CategoryResource::collection($categories)
+            'data' => CategoryResource::collection($categories),
         ]);
     }
 
     #[OA\Get(
         path: '/categories/{id}',
+        operationId: 'getCategory',
         summary: 'Détail d\'une catégorie',
         description: 'Récupérer les détails d\'une catégorie par ID ou slug',
         tags: ['Categories'],
@@ -76,12 +78,13 @@ class CategoryController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new CategoryResource($category)
+            'data' => new CategoryResource($category),
         ]);
     }
 
     #[OA\Get(
         path: '/categories/{id}/products',
+        operationId: 'getCategoryProducts',
         summary: 'Produits d\'une catégorie',
         description: 'Récupérer les produits d\'une catégorie spécifique',
         tags: ['Categories'],
@@ -137,8 +140,8 @@ class CategoryController extends Controller
                     'last_page' => $products->lastPage(),
                     'per_page' => $products->perPage(),
                     'total' => $products->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

@@ -13,6 +13,7 @@ class ProductController extends Controller
 {
     #[OA\Get(
         path: '/products',
+        operationId: 'getProducts',
         summary: 'Liste des produits',
         description: 'Récupérer la liste paginée des produits actifs',
         tags: ['Products'],
@@ -69,13 +70,14 @@ class ProductController extends Controller
                     'last_page' => $products->lastPage(),
                     'per_page' => $products->perPage(),
                     'total' => $products->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     #[OA\Get(
         path: '/products/featured',
+        operationId: 'getFeaturedProducts',
         summary: 'Produits vedettes',
         description: 'Récupérer les produits mis en avant',
         tags: ['Products'],
@@ -105,12 +107,13 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection($products),
         ]);
     }
 
     #[OA\Get(
         path: '/products/{id}',
+        operationId: 'getProduct',
         summary: 'Détail d\'un produit',
         description: 'Récupérer les détails d\'un produit par ID ou slug',
         tags: ['Products'],
@@ -141,12 +144,13 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new ProductResource($product)
+            'data' => new ProductResource($product),
         ]);
     }
 
     #[OA\Get(
         path: '/products/search',
+        operationId: 'searchProducts',
         summary: 'Rechercher des produits',
         description: 'Rechercher des produits par nom ou description',
         tags: ['Products'],
@@ -188,7 +192,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection($products),
         ]);
     }
 }

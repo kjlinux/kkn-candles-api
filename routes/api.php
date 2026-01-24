@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 // =====================
 
 // Authentification (avec limitation stricte)
-Route::prefix('auth')->middleware('throttle:10,1')->group(function () {
+Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
@@ -48,6 +48,9 @@ Route::prefix('categories')->group(function () {
 
 // Contact
 Route::post('/contact', [ContactController::class, 'store']);
+
+// Médias (images publiques)
+Route::get('/media', [MediaController::class, 'index']);
 
 // Webhooks CinetPay (sans auth)
 Route::prefix('payments/cinetpay')->group(function () {
@@ -85,7 +88,7 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Paiements
-    Route::prefix('payments')->middleware('throttle:5,1')->group(function () {
+    Route::prefix('payments')->middleware('throttle:payments')->group(function () {
         Route::post('/cinetpay/init', [PaymentController::class, 'initCinetpay']);
         Route::get('/{payment}/status', [PaymentController::class, 'status']);
     });

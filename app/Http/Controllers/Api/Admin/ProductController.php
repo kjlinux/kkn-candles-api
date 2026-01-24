@@ -14,6 +14,7 @@ class ProductController extends Controller
 {
     #[OA\Get(
         path: '/admin/products',
+        operationId: 'adminGetProducts',
         summary: 'Liste des produits (Admin)',
         description: 'Récupérer tous les produits avec filtrage et pagination',
         tags: ['Admin - Products'],
@@ -79,13 +80,14 @@ class ProductController extends Controller
                     'last_page' => $products->lastPage(),
                     'per_page' => $products->perPage(),
                     'total' => $products->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     #[OA\Post(
         path: '/admin/products',
+        operationId: 'adminCreateProduct',
         summary: 'Créer un produit',
         description: 'Créer un nouveau produit',
         tags: ['Admin - Products'],
@@ -135,12 +137,13 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit créé avec succès',
-            'data' => new ProductResource($product->load('category'))
+            'data' => new ProductResource($product->load('category')),
         ], 201);
     }
 
     #[OA\Get(
         path: '/admin/products/{product}',
+        operationId: 'adminGetProduct',
         summary: 'Détail d\'un produit (Admin)',
         description: 'Récupérer les détails d\'un produit',
         tags: ['Admin - Products'],
@@ -168,12 +171,13 @@ class ProductController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new ProductResource($product->load('category'))
+            'data' => new ProductResource($product->load('category')),
         ]);
     }
 
     #[OA\Put(
         path: '/admin/products/{product}',
+        operationId: 'adminUpdateProduct',
         summary: 'Modifier un produit',
         description: 'Mettre à jour un produit existant',
         tags: ['Admin - Products'],
@@ -227,12 +231,13 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit mis à jour',
-            'data' => new ProductResource($product->fresh()->load('category'))
+            'data' => new ProductResource($product->fresh()->load('category')),
         ]);
     }
 
     #[OA\Delete(
         path: '/admin/products/{product}',
+        operationId: 'adminDeleteProduct',
         summary: 'Supprimer un produit',
         description: 'Supprimer un produit',
         tags: ['Admin - Products'],
@@ -262,7 +267,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Produit supprimé'
+            'message' => 'Produit supprimé',
         ]);
     }
 }

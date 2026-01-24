@@ -19,6 +19,7 @@ class PaymentController extends Controller
 
     #[OA\Post(
         path: '/payments/cinetpay/init',
+        operationId: 'initCinetpayPayment',
         summary: 'Initialiser un paiement CinetPay',
         description: 'Initialiser un paiement via CinetPay pour une commande',
         tags: ['Payments'],
@@ -68,14 +69,14 @@ class PaymentController extends Controller
         if ($order->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Commande non trouvée'
+                'message' => 'Commande non trouvée',
             ], 404);
         }
 
         if ($order->status !== 'pending') {
             return response()->json([
                 'success' => false,
-                'message' => 'Cette commande ne peut pas être payée'
+                'message' => 'Cette commande ne peut pas être payée',
             ], 400);
         }
 
@@ -85,24 +86,25 @@ class PaymentController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Paiement initialisé',
-                'data' => $paymentData
+                'data' => $paymentData,
             ]);
 
         } catch (\Exception $e) {
             Log::error('CinetPay init error', [
                 'order_id' => $order->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Erreur lors de l\'initialisation du paiement'
+                'message' => 'Erreur lors de l\'initialisation du paiement',
             ], 500);
         }
     }
 
     #[OA\Post(
         path: '/payments/cinetpay/notify',
+        operationId: 'cinetpayNotifyWebhook',
         summary: 'Webhook de notification CinetPay',
         description: 'Endpoint pour recevoir les notifications de paiement de CinetPay (appelé par CinetPay)',
         tags: ['Payments'],
@@ -138,24 +140,25 @@ class PaymentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Notification traitée'
+                'message' => 'Notification traitée',
             ]);
 
         } catch (\Exception $e) {
             Log::error('CinetPay notify error', [
                 'error' => $e->getMessage(),
-                'data' => $request->all()
+                'data' => $request->all(),
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
 
     #[OA\Get(
         path: '/payments/cinetpay/return',
+        operationId: 'cinetpayReturnPage',
         summary: 'Page de retour CinetPay',
         description: 'Page de retour après paiement CinetPay',
         tags: ['Payments'],
@@ -189,19 +192,19 @@ class PaymentController extends Controller
     {
         $transactionId = $request->input('transaction_id');
 
-        if (!$transactionId) {
+        if (! $transactionId) {
             return response()->json([
                 'success' => false,
-                'message' => 'Transaction ID manquant'
+                'message' => 'Transaction ID manquant',
             ], 400);
         }
 
         $payment = Payment::where('transaction_id', $transactionId)->first();
 
-        if (!$payment) {
+        if (! $payment) {
             return response()->json([
                 'success' => false,
-                'message' => 'Paiement non trouvé'
+                'message' => 'Paiement non trouvé',
             ], 404);
         }
 
@@ -211,12 +214,13 @@ class PaymentController extends Controller
                 'payment_status' => $payment->status,
                 'order_id' => $payment->order_id,
                 'order_status' => $payment->order->status,
-            ]
+            ],
         ]);
     }
 
     #[OA\Get(
         path: '/payments/{payment}/status',
+        operationId: 'getPaymentStatus',
         summary: 'Statut d\'un paiement',
         description: 'Vérifier le statut d\'un paiement',
         tags: ['Payments'],
@@ -254,7 +258,7 @@ class PaymentController extends Controller
         if ($payment->order->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Paiement non trouvé'
+                'message' => 'Paiement non trouvé',
             ], 404);
         }
 
@@ -266,7 +270,7 @@ class PaymentController extends Controller
                 'amount' => $payment->amount,
                 'payment_method' => $payment->payment_method,
                 'completed_at' => $payment->completed_at,
-            ]
+            ],
         ]);
     }
 }

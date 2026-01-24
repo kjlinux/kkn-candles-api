@@ -12,6 +12,7 @@ class ContactController extends Controller
 {
     #[OA\Post(
         path: '/contact',
+        operationId: 'sendContactMessage',
         summary: 'Envoyer un message de contact',
         description: 'Envoyer un message via le formulaire de contact',
         tags: ['Contact'],
@@ -68,7 +69,7 @@ class ContactController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Votre message a été envoyé avec succès'
+            'message' => 'Votre message a été envoyé avec succès',
         ], 201);
     }
 }

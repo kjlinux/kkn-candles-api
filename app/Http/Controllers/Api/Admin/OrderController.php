@@ -18,6 +18,7 @@ class OrderController extends Controller
 
     #[OA\Get(
         path: '/admin/orders',
+        operationId: 'adminGetOrders',
         summary: 'Liste des commandes (Admin)',
         description: 'Récupérer toutes les commandes avec filtrage et pagination',
         tags: ['Admin - Orders'],
@@ -80,13 +81,14 @@ class OrderController extends Controller
                     'last_page' => $orders->lastPage(),
                     'per_page' => $orders->perPage(),
                     'total' => $orders->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     #[OA\Get(
         path: '/admin/orders/{order}',
+        operationId: 'adminGetOrder',
         summary: 'Détail d\'une commande (Admin)',
         description: 'Récupérer les détails complets d\'une commande',
         tags: ['Admin - Orders'],
@@ -114,12 +116,13 @@ class OrderController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new OrderResource($order->load(['items', 'payment', 'user']))
+            'data' => new OrderResource($order->load(['items', 'payment', 'user'])),
         ]);
     }
 
     #[OA\Put(
         path: '/admin/orders/{order}/status',
+        operationId: 'adminUpdateOrderStatus',
         summary: 'Mettre à jour le statut d\'une commande',
         description: 'Modifier le statut d\'une commande',
         tags: ['Admin - Orders'],
@@ -167,13 +170,13 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Statut mis à jour',
-                'data' => new OrderResource($order->fresh()->load(['items', 'payment']))
+                'data' => new OrderResource($order->fresh()->load(['items', 'payment'])),
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }

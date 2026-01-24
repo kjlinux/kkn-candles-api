@@ -19,6 +19,7 @@ class OrderController extends Controller
 
     #[OA\Get(
         path: '/orders',
+        operationId: 'getOrders',
         summary: 'Liste des commandes',
         description: 'Récupérer les commandes de l\'utilisateur connecté',
         tags: ['Orders'],
@@ -67,13 +68,14 @@ class OrderController extends Controller
                     'last_page' => $orders->lastPage(),
                     'per_page' => $orders->perPage(),
                     'total' => $orders->total(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
     #[OA\Post(
         path: '/orders',
+        operationId: 'createOrder',
         summary: 'Créer une commande',
         description: 'Créer une nouvelle commande',
         tags: ['Orders'],
@@ -137,19 +139,20 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Commande créée avec succès',
-                'data' => new OrderResource($order->load('items'))
+                'data' => new OrderResource($order->load('items')),
             ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
 
     #[OA\Get(
         path: '/orders/{order}',
+        operationId: 'getOrder',
         summary: 'Détail d\'une commande',
         description: 'Récupérer les détails d\'une commande',
         tags: ['Orders'],
@@ -177,13 +180,13 @@ class OrderController extends Controller
         if ($order->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Commande non trouvée'
+                'message' => 'Commande non trouvée',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
-            'data' => new OrderResource($order->load(['items', 'payment']))
+            'data' => new OrderResource($order->load(['items', 'payment'])),
         ]);
     }
 }

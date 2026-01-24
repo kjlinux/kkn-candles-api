@@ -14,6 +14,7 @@ class CartController extends Controller
 {
     #[OA\Get(
         path: '/cart',
+        operationId: 'getCart',
         summary: 'Afficher le panier',
         description: 'Récupérer le contenu du panier de l\'utilisateur connecté',
         tags: ['Cart'],
@@ -39,12 +40,13 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => new CartResource($cart)
+            'data' => new CartResource($cart),
         ]);
     }
 
     #[OA\Post(
         path: '/cart/items',
+        operationId: 'addCartItem',
         summary: 'Ajouter au panier',
         description: 'Ajouter un produit au panier',
         tags: ['Cart'],
@@ -85,10 +87,10 @@ class CartController extends Controller
 
         $product = Product::findOrFail($request->product_id);
 
-        if (!$product->in_stock) {
+        if (! $product->in_stock) {
             return response()->json([
                 'success' => false,
-                'message' => 'Ce produit n\'est plus en stock'
+                'message' => 'Ce produit n\'est plus en stock',
             ], 400);
         }
 
@@ -102,7 +104,7 @@ class CartController extends Controller
             if ($newQuantity > $product->stock_quantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Stock insuffisant'
+                    'message' => 'Stock insuffisant',
                 ], 400);
             }
 
@@ -113,7 +115,7 @@ class CartController extends Controller
             if ($request->quantity > $product->stock_quantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Stock insuffisant'
+                    'message' => 'Stock insuffisant',
                 ], 400);
             }
 
@@ -129,12 +131,13 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit ajouté au panier',
-            'data' => new CartResource($cart)
+            'data' => new CartResource($cart),
         ]);
     }
 
     #[OA\Put(
         path: '/cart/items/{item}',
+        operationId: 'updateCartItem',
         summary: 'Modifier la quantité',
         description: 'Modifier la quantité d\'un article dans le panier',
         tags: ['Cart'],
@@ -174,7 +177,7 @@ class CartController extends Controller
         if ($item->cart->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Non autorisé'
+                'message' => 'Non autorisé',
             ], 403);
         }
 
@@ -185,7 +188,7 @@ class CartController extends Controller
         if ($request->quantity > $item->product->stock_quantity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Stock insuffisant'
+                'message' => 'Stock insuffisant',
             ], 400);
         }
 
@@ -198,12 +201,13 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Quantité mise à jour',
-            'data' => new CartResource($cart)
+            'data' => new CartResource($cart),
         ]);
     }
 
     #[OA\Delete(
         path: '/cart/items/{item}',
+        operationId: 'removeCartItem',
         summary: 'Retirer du panier',
         description: 'Retirer un article du panier',
         tags: ['Cart'],
@@ -232,7 +236,7 @@ class CartController extends Controller
         if ($item->cart->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Non autorisé'
+                'message' => 'Non autorisé',
             ], 403);
         }
 
@@ -244,12 +248,13 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit retiré du panier',
-            'data' => new CartResource($cart)
+            'data' => new CartResource($cart),
         ]);
     }
 
     #[OA\Delete(
         path: '/cart',
+        operationId: 'clearCart',
         summary: 'Vider le panier',
         description: 'Supprimer tous les articles du panier',
         tags: ['Cart'],
@@ -278,7 +283,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Panier vidé'
+            'message' => 'Panier vidé',
         ]);
     }
 }

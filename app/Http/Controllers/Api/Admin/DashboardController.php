@@ -7,13 +7,13 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use OpenApi\Attributes as OA;
 
 class DashboardController extends Controller
 {
     #[OA\Get(
         path: '/admin/dashboard',
+        operationId: 'adminGetDashboard',
         summary: 'Tableau de bord administrateur',
         description: 'Récupérer les statistiques et les commandes récentes pour le tableau de bord admin',
         tags: ['Admin - Dashboard'],
@@ -144,7 +144,7 @@ class DashboardController extends Controller
             ->latest()
             ->limit(10)
             ->get()
-            ->map(fn($order) => [
+            ->map(fn ($order) => [
                 'id' => $order->id,
                 'order_number' => $order->order_number,
                 'customer_name' => $order->customer_full_name,
@@ -159,7 +159,7 @@ class DashboardController extends Controller
             'data' => [
                 'stats' => $stats,
                 'recent_orders' => $recentOrders,
-            ]
+            ],
         ]);
     }
 }
