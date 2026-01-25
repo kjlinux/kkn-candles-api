@@ -25,6 +25,7 @@ class ProductResource extends JsonResource
             'is_active' => $this->is_active,
             'images' => $this->images ?? [],
             'main_image' => $this->main_image,
+            'media' => MediaResource::collection($this->whenLoaded('media')),
             'specifications' => $this->specifications,
             'sort_order' => $this->sort_order,
             'created_at' => $this->created_at?->toISOString(),

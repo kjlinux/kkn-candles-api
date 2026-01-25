@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -49,7 +50,7 @@ class Product extends Model
 
     public function getFormattedPriceAttribute(): string
     {
-        return number_format($this->price, 0, ',', ' ') . ' FCFA';
+        return number_format($this->price, 0, ',', ' ').' FCFA';
     }
 
     // Scopes
@@ -87,7 +88,7 @@ class Product extends Model
     {
         $this->increment('stock_quantity', $quantity);
 
-        if ($this->stock_quantity > 0 && !$this->in_stock) {
+        if ($this->stock_quantity > 0 && ! $this->in_stock) {
             $this->update(['in_stock' => true]);
         }
     }
@@ -96,5 +97,35 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function media(): BelongsToMany
+    {
+        return $this->belongsToMany(Media::class, 'product_media')
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order')
+            ->withTimestamps();
+    }
+
+    public function attachMedia(string $mediaId, ?int $sortOrder = null): void
+    {
+        $maxOrder = $this->media()->max('product_media.sort_order') ?? -1;
+        $this->media()->syncWithoutDetaching([
+            $mediaId => ['sort_order' => $sortOrder ?? $maxOrder + 1],
+        ]);
+    }
+
+    public function detachMedia(string $mediaId): void
+    {
+        $this->media()->detach($mediaId);
+    }
+
+    public function syncMedia(array $mediaIds): void
+    {
+        $syncData = [];
+        foreach ($mediaIds as $index => $mediaId) {
+            $syncData[$mediaId] = ['sort_order' => $index];
+        }
+        $this->media()->sync($syncData);
     }
 }

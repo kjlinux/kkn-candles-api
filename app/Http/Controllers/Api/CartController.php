@@ -36,6 +36,10 @@ class CartController extends Controller
     public function index(): JsonResponse
     {
         $cart = auth()->user()->getOrCreateCart();
+
+        // Nettoyer les items dont le produit a été supprimé
+        $cart->cleanOrphanItems();
+
         $cart->load('items.product');
 
         return response()->json([

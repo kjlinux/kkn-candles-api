@@ -15,7 +15,13 @@
       "Bash(xargs cat:*)",
       "Bash(C:laragonbinphpphp-8.4.1-Win32-vs17-x64php.exe artisan l5-swagger:generate)",
       "Bash(C:/laragon/bin/php/php-8.4.4-Win32-vs17-x64/php artisan make:command MigrateMediaToS3 --no-interaction)",
-      "Bash(vendor/bin/pint.bat:*)"
+      "Bash(vendor/bin/pint.bat:*)",
+      "mcp__laravel-boost__database-schema",
+      "mcp__laravel-boost__database-query",
+      "Bash(cmd /c \"php artisan tinker --execute=\"\"echo json_encode\\(\\\\Illuminate\\\\Support\\\\Facades\\\\DB::select\\(''SELECT ci.id, ci.product_id, ci.cart_id FROM cart_items ci LEFT JOIN products p ON ci.product_id = p.id WHERE p.id IS NULL''\\)\\);\"\"\")",
+      "Bash(vendor/bin/pint:*)",
+      "Bash(vendor\\\\bin\\\\pint:*)",
+      "Bash(cmd /c \"vendor\\\\bin\\\\pint --dirty\")"
     ]
   }
 }

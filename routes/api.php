@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\MediaController;
+use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Api\Admin\ProductMediaController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
@@ -7,11 +13,6 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Api\Admin\DashboardController;
-use App\Http\Controllers\Api\Admin\MediaController;
-use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -116,6 +117,13 @@ Route::prefix('admin')->middleware(['jwt.auth', 'admin'])->group(function () {
         Route::get('/{product}', [AdminProductController::class, 'show']);
         Route::put('/{product}', [AdminProductController::class, 'update']);
         Route::delete('/{product}', [AdminProductController::class, 'destroy']);
+
+        // Gestion des médias de produits
+        Route::get('/{product}/media', [ProductMediaController::class, 'index']);
+        Route::post('/{product}/media/upload', [ProductMediaController::class, 'upload']);
+        Route::post('/{product}/media', [ProductMediaController::class, 'attach']);
+        Route::delete('/{product}/media/{media}', [ProductMediaController::class, 'detach']);
+        Route::put('/{product}/media/reorder', [ProductMediaController::class, 'reorder']);
     });
 
     // Gestion des catégories

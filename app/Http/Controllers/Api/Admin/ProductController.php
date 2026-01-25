@@ -50,7 +50,7 @@ class ProductController extends Controller
     )]
     public function index(Request $request): JsonResponse
     {
-        $query = Product::query()->with('category');
+        $query = Product::query()->with(['category', 'media']);
 
         if ($request->has('category_id')) {
             $query->where('category_id', $request->category_id);
@@ -137,7 +137,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit créé avec succès',
-            'data' => new ProductResource($product->load('category')),
+            'data' => new ProductResource($product->load(['category', 'media'])),
         ], 201);
     }
 
@@ -171,7 +171,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => new ProductResource($product->load('category')),
+            'data' => new ProductResource($product->load(['category', 'media'])),
         ]);
     }
 
@@ -231,7 +231,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Produit mis à jour',
-            'data' => new ProductResource($product->fresh()->load('category')),
+            'data' => new ProductResource($product->fresh()->load(['category', 'media'])),
         ]);
     }
 

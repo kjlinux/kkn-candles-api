@@ -37,4 +37,22 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class);
     }
+
+    /**
+     * Items avec leurs produits existants uniquement (filtre les produits supprimés)
+     */
+    public function validItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class)->whereHas('product');
+    }
+
+    /**
+     * Supprime les items dont le produit n'existe plus
+     */
+    public function cleanOrphanItems(): int
+    {
+        return $this->items()
+            ->whereDoesntHave('product')
+            ->delete();
+    }
 }
