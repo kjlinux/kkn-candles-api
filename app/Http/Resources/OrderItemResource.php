@@ -16,8 +16,9 @@ class OrderItemResource extends JsonResource
             'product_image' => $this->product_image,
             'quantity' => $this->quantity,
             'unit_price' => $this->unit_price,
-            'total' => $this->total,
-            'formatted_total' => number_format($this->total, 0, ',', ' ') . ' FCFA',
+            'formatted_unit_price' => number_format($this->unit_price, 0, ',', ' ') . ' FCFA',
+            'subtotal' => $this->total,
+            'formatted_subtotal' => number_format($this->total, 0, ',', ' ') . ' FCFA',
         ];
     }
 }
